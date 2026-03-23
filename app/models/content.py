@@ -27,3 +27,5 @@ class Content(Base):
     source_priority = Column(Integer, default=5)
 
     importance = Column(Integer, default=5)
+
+    status = Column(Integer, default=0)

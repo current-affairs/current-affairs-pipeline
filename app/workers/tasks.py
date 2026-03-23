@@ -133,7 +133,7 @@ def process_rss_content(feed_config):
                 "url": link,
                 "title": title.strip(),
                 "content": content.strip(),
-                "published_at": parse_rss_date(published_date),  # ✅ datetime
+                "published_at": parse_rss_date(published_date),
                 "language": language,
             }
 

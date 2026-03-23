@@ -7,6 +7,7 @@ from app.services.language import detect_language
 from app.utils.hash import generate_hash
 from app.services.canonical import update_canonical_for_cluster
 from app.core.source_priority import get_source_priority
+from app.core.feed_status import FeedStatus
 import logging
 
 logger = logging.getLogger(__name__)
@@ -51,7 +52,8 @@ def process_content(data):
                 published_at=data["published_at"],
                 hash=hash_value,
                 cluster_id=cluster_id,
-                source_priority=get_source_priority(data["source_name"])
+                source_priority=get_source_priority(data["source_name"]),
+                status = FeedStatus.Pending
             )
             
             # Save to database

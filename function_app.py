@@ -1,38 +1,27 @@
-from sys import exception
 import json
 import azure.functions as func
-import logging
-from app.core.config import settings
 from app.api.ingest import ingest_rss
+from app.schemas.digest_request import DigestRequest
+from app.schemas.digest_response import DigestResponse
+from app.schemas.ingest import IngestRequest
+from app.services.digest import get_today_digest
 
 app = func.FunctionApp(http_auth_level=func.AuthLevel.FUNCTION)
-
 
 @app.route(route="rss/ingest")
 async def process_rss(req: func.HttpRequest) -> func.HttpResponse:
     req_body = req.get_json()
-    response = await ingest_rss(req_body)
+    ingest_request = IngestRequest(**req_body)
+    response = await ingest_rss(ingest_request)
     return func.HttpResponse(json.dumps(response))
 
+@app.route(route="digest/raw")
+async def get_raw_digest(req: func.HttpRequest) -> func.HttpResponse:
+    req_body = req.get_json()
+    request = DigestRequest(**req_body)
+    response = get_today_digest(request)
 
-# @app.route(route="http_trigger")
-# def http_trigger(req: func.HttpRequest) -> func.HttpResponse:
-#     logging.info('Python HTTP trigger function processed a request.')
-#     logging.info(f"Database: {settings.DATABASE_URL}")
-#     logging.info(f"Redis: {settings.REDIS_URL}")
-#     name = req.params.get('name')
-#     if not name:
-#         try:
-#             req_body = req.get_json()
-#         except ValueError:
-#             pass
-#         else:
-#             name = req_body.get('name')
-
-#     if name:
-#         return func.HttpResponse(f"Hello, {name}. This HTTP triggered function executed successfully.")
-#     else:
-#         return func.HttpResponse(
-#              "This HTTP triggered function executed successfully. Pass a name in the query string or in the request body for a personalized response.",
-#              status_code=200
-#         )
+    return func.HttpResponse(
+        response.model_dump_json(),
+        mimetype="application/json"
+    )
