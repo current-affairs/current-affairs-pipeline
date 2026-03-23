@@ -1,0 +1,198 @@
+{
+  "name": "RSS Feed Processor (Sequential No Aggregate)",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 23
+            }
+          ]
+        }
+      },
+      "id": "schedule-trigger",
+      "name": "Schedule Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1,
+      "position": [-200, 0]
+    },
+    {
+      "parameters": {
+        "jsCode": "return [\n  {\n    \"name\": \"BBC India\",\n    \"url\": \"https://feeds.bbci.co.uk/news/world/asia/india/rss.xml\",\n    \"language\": \"en\",\n    \"priority\": 2\n  },\n  {\n    \"name\": \"PIB\",\n    \"url\": \"https://www.pib.gov.in/RssMain.aspx?ModId=6&Lang=1&Regid=3&reg=3\",\n    \"language\": \"en\",\n    \"priority\": 1\n  },\n  {\n    \"name\": \"The Hindu\",\n    \"url\": \"https://www.thehindu.com/news/national/feeder/default.rss\",\n    \"language\": \"en\",\n    \"priority\": 1\n  }\n];"
+      },
+      "id": "code-node",
+      "name": "Hardcoded JSON Data",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [0, 0]
+    },
+    {
+      "parameters": {
+        "batchSize": 1
+      },
+      "id": "split-batches",
+      "name": "Split In Batches",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 1,
+      "position": [200, 0]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $vars.CA_FUNC_URL }}rss/ingest",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "User-Agent",
+              "value": "Mozilla/5.0 (compatible; n8n-rss-bot/1.0)"
+            },
+            {
+              "name": "Accept",
+              "value": "application/rss+xml, application/xml, text/xml, */*"
+            },
+            {
+              "name": "Accept-Language",
+              "value": "en-US,en;q=0.9"
+            },
+            {
+              "name": "x-functions-key",
+              "value": "={{ $vars.CA_FUNC_KEY }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "name",
+              "value": "={{ $json.name }}"
+            },
+            {
+              "name": "url",
+              "value": "={{ $json.url }}"
+            },
+            {
+              "name": "language",
+              "value": "={{ $json.language }}"
+            },
+            {
+              "name": "priority",
+              "value": "={{ $json.priority }}"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 300000
+        }
+      },
+      "id": "http-request",
+      "name": "Fetch RSS Feed",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [400, 0]
+    },
+    {
+      "parameters": {
+        "amount": 30
+      },
+      "id": "wait-node",
+      "name": "Wait 30s",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1,
+      "position": [600, 0]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $vars.CA_FUNC_URL }}digest/raw/clean",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "x-functions-key",
+              "value": "={{ $vars.CA_FUNC_KEY }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{}"
+      },
+      "id": "clean-node",
+      "name": "Clean Raw Feeds",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [450, 200]
+    }
+  ],
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Hardcoded JSON Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Hardcoded JSON Data": {
+      "main": [
+        [
+          {
+            "node": "Split In Batches",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split In Batches": {
+      "main": [
+        [
+          {
+            "node": "Fetch RSS Feed",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Clean Raw Feeds",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch RSS Feed": {
+      "main": [
+        [
+          {
+            "node": "Wait 30s",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait 30s": {
+      "main": [
+        [
+          {
+            "node": "Split In Batches",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  }
+}
