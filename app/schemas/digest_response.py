@@ -1,6 +1,6 @@
 from typing import List
 from pydantic import BaseModel
-from schemas.digest_item import DigestItem
+from app.schemas.digest_item import DigestItem
 
 
 class DigestResponse(BaseModel):

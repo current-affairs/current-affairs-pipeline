@@ -1,5 +1,5 @@
 from sys import exception
-
+import json
 import azure.functions as func
 import logging
 from app.core.config import settings
@@ -11,8 +11,8 @@ app = func.FunctionApp(http_auth_level=func.AuthLevel.FUNCTION)
 @app.route(route="rss/ingest")
 async def process_rss(req: func.HttpRequest) -> func.HttpResponse:
     req_body = req.get_json()
-    response = ingest_rss(req_body)
-    return func.HttpResponse(response)
+    response = await ingest_rss(req_body)
+    return func.HttpResponse(json.dumps(response))
 
 
 # @app.route(route="http_trigger")

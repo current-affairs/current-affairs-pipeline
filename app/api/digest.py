@@ -1,9 +1,9 @@
 from datetime import datetime, timedelta, timezone
-from schemas.digest_request import DigestRequest
-from schemas.digest_item import DigestItem
-from schemas.digest_response import DigestResponse
-from core.database import SessionLocal
-from models.content import Content
+from app.schemas.digest_request import DigestRequest
+from app.schemas.digest_item import DigestItem
+from app.schemas.digest_response import DigestResponse
+from app.core.database import SessionLocal
+from app.models.content import Content
 
 
 # ==========================

@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from models.content import Content
+from app.models.content import Content
 from datetime import datetime, timezone
 
 def compute_score(content) -> int:

@@ -1,7 +1,7 @@
 from sqlalchemy import Column, String, Text, Integer, DateTime, Boolean, UUID
 import uuid
 from datetime import datetime
-from core.database import Base
+from app.core.database import Base
 
 class Content(Base):
     __tablename__ = "content"

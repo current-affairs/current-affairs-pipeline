@@ -39,6 +39,7 @@ class Settings(BaseSettings):
     # ========================
     REQUEST_TIMEOUT: int = 10
     MAX_RETRIES: int = 3
+    
 
     model_config = SettingsConfigDict(
         env_file=None,  # Don't use .env file
