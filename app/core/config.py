@@ -27,7 +27,11 @@ class Settings(BaseSettings):
     # ========================
     # ML / Embeddings
     # ========================
-    # EMBEDDING_MODEL: str = "text-embedding-3-small"
+    EMBEDDING_MODEL: str = "text-embedding-3-small"
+    AZURE_OPENAI_API_KEY: str
+    AZURE_OPENAI_ENDPOINT: str
+    AZURE_CHAT_MODEL: str
+    AZURE_OPENAI_VERSION: str
 
     # ========================
     # Storage (future)
