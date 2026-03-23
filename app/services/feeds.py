@@ -53,7 +53,7 @@ def process_content(data):
                 hash=hash_value,
                 cluster_id=cluster_id,
                 source_priority=get_source_priority(data["source_name"]),
-                status = FeedStatus.Pending
+                status = FeedStatus.Pending.value
             )
             
             # Save to database
