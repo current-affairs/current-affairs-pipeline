@@ -16,7 +16,7 @@ class BaseCrawler(ABC):
         import httpx
 
         headers = {
-            "User-Agent": "Mozilla/5.0"
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
         }
 
         response = httpx.get(item.source_url, headers=headers, timeout=10)

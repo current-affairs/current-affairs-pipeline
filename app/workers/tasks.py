@@ -3,9 +3,39 @@ from dateutil import parser
 from datetime import datetime, timezone
 import logging
 from app.services import feeds
+from urllib.parse import urlparse, urlunparse, parse_qs, urlencode
 
 logging.basicConfig(level=logging.INFO)
 
+
+def merge_feed_query_params(entry_url: str, feed_url: str) -> str:
+    """
+    - Forces www for PIB
+    - Appends query params from feed_url into entry_url
+    - Avoids duplicates
+    """
+    if "pib.gov.in" not in entry_url:
+        return entry_url
+
+    entry_parsed = urlparse(entry_url)
+    feed_parsed = urlparse(feed_url)
+
+    # Force www
+    netloc = "www.pib.gov.in"
+
+    # Parse query params
+    entry_qs = parse_qs(entry_parsed.query)
+    feed_qs = parse_qs(feed_parsed.query)
+
+    # Merge feed params into entry params (without overwriting existing like PRID)
+    for key, value in feed_qs.items():
+        if key not in entry_qs:
+            entry_qs[key] = value
+
+    # Rebuild query string
+    new_query = urlencode(entry_qs, doseq=True)
+
+    return urlunparse(entry_parsed._replace(netloc=netloc, query=new_query))
 
 # ============================
 # 🔹 Parse RSS Date (FIXED)
@@ -113,6 +143,7 @@ def process_rss_content(feed_config):
         try:
             title = safe_get(entry, "title", "")
             link = safe_get(entry, "link", "")
+            link = merge_feed_query_params(link, url)
             published_date = safe_get(entry, "published", None)
 
             # Skip old content early
