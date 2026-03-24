@@ -1,0 +1,31 @@
+from abc import ABC, abstractmethod
+
+from app.schemas.digest_item import DigestItem
+
+
+class BaseCrawler(ABC):
+
+    def crawl(self, item: DigestItem) -> DigestItem:
+        html = self.fetch(item)
+        parsed = self.parse(html, item)
+        cleaned = self.clean(parsed)
+        return cleaned
+
+    def fetch(self, item: DigestItem) -> str:
+        import httpx
+
+        headers = {
+            "User-Agent": "Mozilla/5.0"
+        }
+
+        response = httpx.get(item.id, headers=headers, timeout=10)
+        response.raise_for_status()
+        return response.text
+
+    @abstractmethod
+    def parse(self, html: str, item: DigestItem) -> dict:
+        pass
+
+    @abstractmethod
+    def clean(self, data: dict) -> DigestItem:
+        pass
