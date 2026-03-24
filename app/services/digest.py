@@ -23,7 +23,7 @@ def get_today_digest(request: DigestRequest) -> DigestResponse:
         query = db.query(Content).filter(
             Content.is_canonical == True,
             Content.published_at >= today_start,
-            Content.status == FeedStatus.Pending.value
+            Content.status == request.status.value
         )
 
         if request.languages:
@@ -129,3 +129,4 @@ async def clean_daily_digest() -> CleanDigestResult:
     )
 
     return result
+
