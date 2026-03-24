@@ -1,5 +1,5 @@
 {
-  "name": "RSS Feed Processor (Sequential No Aggregate)",
+  "name": "RSS Feed Processor",
   "nodes": [
     {
       "parameters": {
@@ -11,97 +11,14 @@
           ]
         }
       },
-      "id": "schedule-trigger",
+      "id": "24d5ad3f-6a89-4e39-b309-8e04dc9a910a",
       "name": "Schedule Trigger",
       "type": "n8n-nodes-base.scheduleTrigger",
       "typeVersion": 1,
-      "position": [-200, 0]
-    },
-    {
-      "parameters": {
-        "jsCode": "return [\n  {\n    \"name\": \"BBC India\",\n    \"url\": \"https://feeds.bbci.co.uk/news/world/asia/india/rss.xml\",\n    \"language\": \"en\",\n    \"priority\": 2\n  },\n  {\n    \"name\": \"PIB\",\n    \"url\": \"https://www.pib.gov.in/RssMain.aspx?ModId=6&Lang=1&Regid=3&reg=3\",\n    \"language\": \"en\",\n    \"priority\": 1\n  },\n  {\n    \"name\": \"The Hindu\",\n    \"url\": \"https://www.thehindu.com/news/national/feeder/default.rss\",\n    \"language\": \"en\",\n    \"priority\": 1\n  }\n];"
-      },
-      "id": "code-node",
-      "name": "Hardcoded JSON Data",
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [0, 0]
-    },
-    {
-      "parameters": {
-        "batchSize": 1
-      },
-      "id": "split-batches",
-      "name": "Split In Batches",
-      "type": "n8n-nodes-base.splitInBatches",
-      "typeVersion": 1,
-      "position": [200, 0]
-    },
-    {
-      "parameters": {
-        "method": "POST",
-        "url": "={{ $vars.CA_FUNC_URL }}rss/ingest",
-        "sendHeaders": true,
-        "headerParameters": {
-          "parameters": [
-            {
-              "name": "User-Agent",
-              "value": "Mozilla/5.0 (compatible; n8n-rss-bot/1.0)"
-            },
-            {
-              "name": "Accept",
-              "value": "application/rss+xml, application/xml, text/xml, */*"
-            },
-            {
-              "name": "Accept-Language",
-              "value": "en-US,en;q=0.9"
-            },
-            {
-              "name": "x-functions-key",
-              "value": "={{ $vars.CA_FUNC_KEY }}"
-            }
-          ]
-        },
-        "sendBody": true,
-        "bodyParameters": {
-          "parameters": [
-            {
-              "name": "name",
-              "value": "={{ $json.name }}"
-            },
-            {
-              "name": "url",
-              "value": "={{ $json.url }}"
-            },
-            {
-              "name": "language",
-              "value": "={{ $json.language }}"
-            },
-            {
-              "name": "priority",
-              "value": "={{ $json.priority }}"
-            }
-          ]
-        },
-        "options": {
-          "timeout": 300000
-        }
-      },
-      "id": "http-request",
-      "name": "Fetch RSS Feed",
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4,
-      "position": [400, 0]
-    },
-    {
-      "parameters": {
-        "amount": 30
-      },
-      "id": "wait-node",
-      "name": "Wait 30s",
-      "type": "n8n-nodes-base.wait",
-      "typeVersion": 1,
-      "position": [600, 0]
+      "position": [
+        0,
+        0
+      ]
     },
     {
       "parameters": {
@@ -118,47 +35,434 @@
         },
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "{}"
+        "jsonBody": "{}",
+        "options": {}
       },
-      "id": "clean-node",
+      "id": "ab6c7485-ae56-4798-a69a-96314d01190c",
       "name": "Clean Raw Feeds",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4,
-      "position": [450, 200]
+      "position": [
+        1184,
+        -304
+      ],
+      "retryOnFail": true,
+      "maxTries": 2,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        416,
+        0
+      ],
+      "id": "ebf44249-be1b-466a-b7bc-b7ecde0a4de1",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "amount": 10
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1136,
+        0
+      ],
+      "id": "d53b3165-aaa2-4b7e-9b87-92713815285d",
+      "name": "Wait",
+      "webhookId": "c58afc91-290a-41be-823e-8250c624122d"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $vars.CA_FUNC_URL }}rss/ingest",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "x-functions-key",
+              "value": "={{ $vars.CA_FUNC_KEY }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n    \"name\": \"{{ $json.name }}\",\n    \"url\": \"{{ $json.url }}\",\n    \"language\": \"{{ $json.language }}\",\n    \"priority\": {{ $json.priority }}\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        736,
+        16
+      ],
+      "id": "95467b84-468c-4f91-b8df-893793bb0dbe",
+      "name": "Ingest Feed",
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "aggregate": "={{ $json.data }}",
+        "fieldsToAggregate": {
+          "fieldToAggregate": [
+            {}
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        672,
+        -304
+      ],
+      "id": "6eeaf5e7-3ec7-4e30-9265-9a876f19066b",
+      "name": "Aggregate"
+    },
+    {
+      "parameters": {
+        "jsCode": "return [\n  {\n    \"name\": \"BBC India\",\n    \"url\": \"https://feeds.bbci.co.uk/news/world/asia/india/rss.xml\",\n    \"language\": \"en\",\n    \"priority\": 2\n  },\n  {\n    \"name\": \"PIB\",\n    \"url\": \"https://www.pib.gov.in/RssMain.aspx?ModId=6&Lang=1&Regid=3&reg=3\",\n    \"language\": \"en\",\n    \"priority\": 1\n  },\n  {\n    \"name\": \"The Hindu\",\n    \"url\": \"https://www.thehindu.com/news/national/feeder/default.rss\",\n    \"language\": \"en\",\n    \"priority\": 1\n  }\n];"
+      },
+      "id": "927ee07d-4f2a-4df5-93fb-09a1ab1cd0eb",
+      "name": "Feed Source",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        208,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "sendTo": "amitextra05@gmail.com",
+        "subject": "RSS Feed Ingestion Completed Successfully",
+        "message": "Hi,\n\nThe RSS feed ingestion process has completed successfully.\n\nAll configured sources have been processed and data is now available for the next stage of the pipeline.\n\nRegards,\nAutomation System",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        928,
+        -304
+      ],
+      "id": "e59d21ff-3d06-494f-8350-8702a37e72e2",
+      "name": "Feed Ingestion Mail",
+      "webhookId": "a312f2f0-64df-4cff-9639-b4c74c797d32",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "tFbl8ZgWAgKnLGtt",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "amitextra05@gmail.com",
+        "subject": "RSS Feed Ingestion Failed for Source",
+        "message": "=Hi,\n\nThe RSS feed ingestion failed for the following source:\n\nURL: {{ $('Loop Over Items').item.json.url }}\n\nPlease review the issue and take necessary action.\n\nRegards,\nAutomation System",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        912,
+        224
+      ],
+      "id": "3526f9b9-e648-4731-9be3-7dd6ada2bb17",
+      "name": "Send a message",
+      "webhookId": "a680b022-96e6-49f0-bddb-8c569166a092",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "tFbl8ZgWAgKnLGtt",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "amitextra05@gmail.com",
+        "subject": "Raw Feed Cleanup Completed",
+        "message": "Hi,\n\nThe raw feed cleanup process has been completed successfully.\n\nAll ingested data has been cleaned and prepared for further processing.\n\nRegards,\nAutomation System",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        1392,
+        -320
+      ],
+      "id": "82d7cc40-f548-43aa-9759-760f818feb5e",
+      "name": "Send a message1",
+      "webhookId": "d68cb7d6-b460-42c4-b924-befa5e4623c3",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "tFbl8ZgWAgKnLGtt",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "digest",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        1824,
+        -320
+      ],
+      "id": "28ba5fd4-e31b-485b-9f6e-42029ccf1b40",
+      "name": "Split Out",
+      "retryOnFail": false,
+      "maxTries": 2
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        2032,
+        -320
+      ],
+      "id": "d201b570-3681-48cf-b8d0-7df2039fbc04",
+      "name": "Loop Over Items1"
+    },
+    {
+      "parameters": {
+        "amount": 10
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        2816,
+        -320
+      ],
+      "id": "4ee69923-8760-428b-9e23-d53a95d9e169",
+      "name": "Wait1",
+      "webhookId": "471a9cae-2a58-4821-ae90-e8c940d091dd"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $vars.CA_FUNC_URL }}digest/raw",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "x-functions-key",
+              "value": "={{ $vars.CA_FUNC_KEY }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"status\": 2\n}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1616,
+        -320
+      ],
+      "id": "87b9642f-d289-4b3a-949c-5adb98812e0b",
+      "name": "Get Cleaned Digest",
+      "retryOnFail": true,
+      "maxTries": 2
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $vars.CA_FUNC_URL }}digest/crawl",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "x-functions-key",
+              "value": "={{ $vars.CA_FUNC_KEY }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"id\": \"{{ $json.id }}\",\n  \"cluster_id\": \"{{ $json.cluster_id }}\",\n  \"title\": \"{{ $json.title }}\",\n  \"source\": \"{{ $json.source }}\",\n  \"published_at\": \"{{ $json.published_at }}\",\n  \"language\": \"{{ $json.language }}\",\n  \"content\": \"{{ $json.content }}\",\n  \"source_url\": \"{{ $json.source_url }}\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        2480,
+        -304
+      ],
+      "id": "60de28a2-c3cb-4c3b-8c2a-db3bd044764f",
+      "name": "Scrap Feeds",
+      "retryOnFail": false,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "sendTo": "amitextra05@gmail.com",
+        "subject": "Digest Scraping Failed for Item",
+        "message": "=Hi,\n\nScraping failed for the following item:\n\nID: {{ $('Loop Over Items1').item.json.id }}\nTitle: {{ $('Loop Over Items1').item.json.title }}\n\nPlease investigate the failure.\n\nRegards,\nAutomation System",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        2656,
+        -96
+      ],
+      "id": "68c2b73b-a91a-478b-9efe-56de8d41828f",
+      "name": "Send a message2",
+      "webhookId": "5e6b5530-5b74-40ba-9429-5370f207c2e0",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "tFbl8ZgWAgKnLGtt",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "amitextra05@gmail.com",
+        "subject": "Digest Scraping Completed Successfully",
+        "message": "Hi,\n\nAll digest items have been successfully scraped and processed.\n\nThe pipeline execution is now complete.\n\nRegards,\nAutomation System",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        2576,
+        -608
+      ],
+      "id": "af5c7797-be64-4f95-952f-87843804cdb7",
+      "name": "Send a message3",
+      "webhookId": "639cc7d8-7127-48fa-a8fc-723025956caf",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "tFbl8ZgWAgKnLGtt",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "aggregate": "={{ $json.data }}",
+        "fieldsToAggregate": {
+          "fieldToAggregate": [
+            {}
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        2272,
+        -608
+      ],
+      "id": "38ef882e-b116-4c77-ac47-8bff7fd64e89",
+      "name": "Aggregate1"
     }
   ],
+  "pinData": {},
   "connections": {
     "Schedule Trigger": {
       "main": [
         [
           {
-            "node": "Hardcoded JSON Data",
+            "node": "Feed Source",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Hardcoded JSON Data": {
+    "Loop Over Items": {
       "main": [
         [
           {
-            "node": "Split In Batches",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Split In Batches": {
-      "main": [
-        [
-          {
-            "node": "Fetch RSS Feed",
+            "node": "Aggregate",
             "type": "main",
             "index": 0
           }
         ],
+        [
+          {
+            "node": "Ingest Feed",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ingest Feed": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate": {
+      "main": [
+        [
+          {
+            "node": "Feed Ingestion Mail",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Feed Source": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Feed Ingestion Mail": {
+      "main": [
         [
           {
             "node": "Clean Raw Feeds",
@@ -168,22 +472,124 @@
         ]
       ]
     },
-    "Fetch RSS Feed": {
+    "Clean Raw Feeds": {
       "main": [
         [
           {
-            "node": "Wait 30s",
+            "node": "Send a message1",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Wait 30s": {
+    "Send a message1": {
       "main": [
         [
           {
-            "node": "Split In Batches",
+            "node": "Get Cleaned Digest",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items1": {
+      "main": [
+        [
+          {
+            "node": "Aggregate1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Scrap Feeds",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait1": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Cleaned Digest": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Scrap Feeds": {
+      "main": [
+        [
+          {
+            "node": "Wait1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send a message2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message2": {
+      "main": [
+        [
+          {
+            "node": "Wait1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate1": {
+      "main": [
+        [
+          {
+            "node": "Send a message3",
             "type": "main",
             "index": 0
           }
@@ -193,6 +599,18 @@
   },
   "active": true,
   "settings": {
-    "executionOrder": "v1"
-  }
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "timeSavedMode": "fixed",
+    "timezone": "Asia/Kolkata",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false
+  },
+  "versionId": "61870dea-e908-4a79-9556-40f2d8388a58",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "d8e2703faabcea826415a962ab4eb2b6a6f8115e679d341c442fb096eace343f"
+  },
+  "id": "hdI4odY3tKVesAi7",
+  "tags": []
 }
