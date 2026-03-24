@@ -7,7 +7,7 @@ from app.ingestion.crawlers.utils import clean_text, remove_boilerplate
 from app.schemas.digest_item import DigestItem
 
 class BBCCrawler(BaseCrawler):
-
+    
     def parse(self, html: str, item: DigestItem) -> dict:
         soup = BeautifulSoup(html, "lxml")
 
@@ -21,7 +21,7 @@ class BBCCrawler(BaseCrawler):
 
         for block in blocks:
             for p in block.find_all("p"):
-                text = self.clean_text(p.get_text(" ", strip=True))
+                text = clean_text(p.get_text(" ", strip=True))
 
                 # Filter junk
                 if not text or len(text.split()) < 8:
@@ -47,3 +47,7 @@ class BBCCrawler(BaseCrawler):
             "content": content,
             "published_at": published
         }
+        
+    def clean(self, data: dict) -> DigestItem:
+        content = clean_text(data["content"])
+        return content
