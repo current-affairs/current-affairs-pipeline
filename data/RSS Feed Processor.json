@@ -81,7 +81,7 @@
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1.1,
       "position": [
-        1136,
+        1024,
         0
       ],
       "id": "d53b3165-aaa2-4b7e-9b87-92713815285d",
@@ -101,8 +101,8 @@
       "type": "n8n-nodes-base.aggregate",
       "typeVersion": 1,
       "position": [
-        672,
-        -304
+        592,
+        -240
       ],
       "id": "6eeaf5e7-3ec7-4e30-9265-9a876f19066b",
       "name": "Aggregate Ingestion Results"
@@ -117,8 +117,8 @@
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.2,
       "position": [
-        928,
-        -304
+        848,
+        -240
       ],
       "id": "e59d21ff-3d06-494f-8350-8702a37e72e2",
       "name": "Notify: Ingestion Success",
@@ -140,8 +140,8 @@
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.2,
       "position": [
-        912,
-        224
+        880,
+        208
       ],
       "id": "3526f9b9-e648-4731-9be3-7dd6ada2bb17",
       "name": "Notify: Ingestion Failure",
@@ -176,8 +176,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4,
       "position": [
-        1184,
-        -304
+        1104,
+        -240
       ],
       "retryOnFail": true,
       "maxTries": 2,
@@ -193,8 +193,8 @@
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.2,
       "position": [
-        1392,
-        -320
+        1312,
+        -256
       ],
       "id": "82d7cc40-f548-43aa-9759-760f818feb5e",
       "name": "Notify: Cleanup Completed",
@@ -233,8 +233,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.4,
       "position": [
-        1616,
-        -320
+        1536,
+        -256
       ],
       "id": "87b9642f-d289-4b3a-949c-5adb98812e0b",
       "name": "Fetch Cleaned Digest",
@@ -249,8 +249,8 @@
       "type": "n8n-nodes-base.splitOut",
       "typeVersion": 1,
       "position": [
-        1824,
-        -320
+        1744,
+        -256
       ],
       "id": "28ba5fd4-e31b-485b-9f6e-42029ccf1b40",
       "name": "Split Digest Items",
@@ -264,8 +264,8 @@
       "type": "n8n-nodes-base.splitInBatches",
       "typeVersion": 3,
       "position": [
-        2032,
-        -320
+        1952,
+        -256
       ],
       "id": "d201b570-3681-48cf-b8d0-7df2039fbc04",
       "name": "Iterate Digest Items"
@@ -291,8 +291,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.4,
       "position": [
-        2288,
-        -304
+        2208,
+        -240
       ],
       "id": "60de28a2-c3cb-4c3b-8c2a-db3bd044764f",
       "name": "Scrape Digest Content",
@@ -306,8 +306,8 @@
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1.1,
       "position": [
-        2624,
-        -320
+        2544,
+        -256
       ],
       "id": "4ee69923-8760-428b-9e23-d53a95d9e169",
       "name": "Throttle Scraping (10s)",
@@ -326,8 +326,8 @@
       "type": "n8n-nodes-base.aggregate",
       "typeVersion": 1,
       "position": [
-        2272,
-        -608
+        2160,
+        -544
       ],
       "id": "38ef882e-b116-4c77-ac47-8bff7fd64e89",
       "name": "Aggregate Scraping Results"
@@ -342,8 +342,8 @@
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.2,
       "position": [
-        2464,
-        -96
+        2384,
+        -48
       ],
       "id": "68c2b73b-a91a-478b-9efe-56de8d41828f",
       "name": "Notify: Scraping Failure",
@@ -365,12 +365,35 @@
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.2,
       "position": [
-        2576,
-        -608
+        2464,
+        -544
       ],
       "id": "af5c7797-be64-4f95-952f-87843804cdb7",
       "name": "Notify: Scraping Completed",
       "webhookId": "639cc7d8-7127-48fa-a8fc-723025956caf",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "tFbl8ZgWAgKnLGtt",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "amitextra05@gmail.com",
+        "subject": "Raw Feed Cleanup Failed",
+        "message": "Hi,\n\nThe raw feed cleanup process has failed.\n\nThe system was unable to clean and prepare the ingested feed data for further processing.\n\nPlease review the logs and take necessary action to resolve the issue.\n\nRegards,\nAutomation System",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        1312,
+        -16
+      ],
+      "id": "cbf5c57b-3656-4be3-ad20-1d8c40e9f0d1",
+      "name": "Notify: Cleanup Failure",
+      "webhookId": "4fe19de7-6cb6-488c-970f-e9c520e43119",
       "credentials": {
         "gmailOAuth2": {
           "id": "tFbl8ZgWAgKnLGtt",
@@ -491,6 +514,13 @@
             "type": "main",
             "index": 0
           }
+        ],
+        [
+          {
+            "node": "Notify: Cleanup Failure",
+            "type": "main",
+            "index": 0
+          }
         ]
       ]
     },
@@ -606,7 +636,7 @@
     "callerPolicy": "workflowsFromSameOwner",
     "availableInMCP": false
   },
-  "versionId": "838d1829-f5ad-42d6-b61c-20c1dc5562c9",
+  "versionId": "627425cd-db3a-4da4-9303-bb9f3c04261e",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "d8e2703faabcea826415a962ab4eb2b6a6f8115e679d341c442fb096eace343f"
