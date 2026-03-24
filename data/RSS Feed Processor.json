@@ -109,7 +109,7 @@
     },
     {
       "parameters": {
-        "sendTo": "amitextra05@gmail.com",
+        "sendTo": "={{$vars.TO_EMAIL}}",
         "subject": "RSS Feed Ingestion Completed Successfully",
         "message": "Hi,\n\nThe RSS feed ingestion process has completed successfully.\n\nAll configured sources have been processed and data is now available for the next stage of the pipeline.\n\nRegards,\nAutomation System",
         "options": {}
@@ -132,7 +132,7 @@
     },
     {
       "parameters": {
-        "sendTo": "amitextra05@gmail.com",
+        "sendTo": "={{$vars.TO_EMAIL}}",
         "subject": "RSS Feed Ingestion Failed for Source",
         "message": "=Hi,\n\nThe RSS feed ingestion failed for the following source:\n\nURL: {{ $('Iterate Feed Sources').item.json.url }}\n\nPlease review the issue and take necessary action.\n\nRegards,\nAutomation System",
         "options": {}
@@ -185,7 +185,7 @@
     },
     {
       "parameters": {
-        "sendTo": "amitextra05@gmail.com",
+        "sendTo": "={{$vars.TO_EMAIL}}",
         "subject": "Raw Feed Cleanup Completed",
         "message": "Hi,\n\nThe raw feed cleanup process has been completed successfully.\n\nAll ingested data has been cleaned and prepared for further processing.\n\nRegards,\nAutomation System",
         "options": {}
@@ -334,7 +334,7 @@
     },
     {
       "parameters": {
-        "sendTo": "amitextra05@gmail.com",
+        "sendTo": "={{$vars.TO_EMAIL}}",
         "subject": "Digest Scraping Failed for Item",
         "message": "=Hi,\n\nScraping failed for the following item:\n\nID: {{ $('Iterate Digest Items').item.json.id }}\nTitle: {{ $('Iterate Digest Items').item.json.title }}\n\nPlease investigate the failure.\n\nRegards,\nAutomation System",
         "options": {}
@@ -357,7 +357,7 @@
     },
     {
       "parameters": {
-        "sendTo": "amitextra05@gmail.com",
+        "sendTo": "={{$vars.TO_EMAIL}}",
         "subject": "Digest Scraping Completed Successfully",
         "message": "Hi,\n\nAll digest items have been successfully scraped and processed.\n\nThe pipeline execution is now complete.\n\nRegards,\nAutomation System",
         "options": {}
@@ -380,7 +380,7 @@
     },
     {
       "parameters": {
-        "sendTo": "amitextra05@gmail.com",
+        "sendTo": "={{$vars.TO_EMAIL}}",
         "subject": "Raw Feed Cleanup Failed",
         "message": "Hi,\n\nThe raw feed cleanup process has failed.\n\nThe system was unable to clean and prepare the ingested feed data for further processing.\n\nPlease review the logs and take necessary action to resolve the issue.\n\nRegards,\nAutomation System",
         "options": {}
@@ -636,7 +636,7 @@
     "callerPolicy": "workflowsFromSameOwner",
     "availableInMCP": false
   },
-  "versionId": "627425cd-db3a-4da4-9303-bb9f3c04261e",
+  "versionId": "073c71d0-e32e-4001-a9ce-e1b9691ccc87",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "d8e2703faabcea826415a962ab4eb2b6a6f8115e679d341c442fb096eace343f"
