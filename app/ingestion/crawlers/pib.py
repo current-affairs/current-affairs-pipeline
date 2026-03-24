@@ -133,12 +133,4 @@ class PIBCrawler(BaseCrawler):
         content = clean_text(data["content"])
         content = remove_boilerplate(content)
 
-        return DigestItem(
-            id="",  # keep original or generate from URL
-            cluster_id="",
-            title=data["title"],
-            source="PIB",
-            published_at=data["published_at"],
-            language="en",
-            content=content
-        )
+        return content

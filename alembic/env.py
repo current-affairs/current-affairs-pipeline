@@ -30,7 +30,7 @@ load_local_settings()
 
 
 from app.core.database import Base
-from app.models import content
+from app.models import content, cleaned_content
 from app.core.config import settings
 
 

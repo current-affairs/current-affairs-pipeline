@@ -9,7 +9,6 @@ class CleanedContent(Base):
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
 
     source_name = Column(String)
-    source_type = Column(String)
     source_url = Column(String, unique=True)
     title = Column(Text)
     content = Column(Text)

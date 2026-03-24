@@ -64,13 +64,4 @@ class HinduCrawler(BaseCrawler):
 
     def clean(self, data: dict) -> DigestItem:
         content = clean_text(data["content"])
-
-        return DigestItem(
-            id="",
-            cluster_id="",
-            title=data["title"],
-            source="The Hindu",
-            published_at=data["published_at"],
-            language="en",
-            content=content
-        )
+        return content

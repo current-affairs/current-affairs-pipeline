@@ -11,3 +11,4 @@ class DigestItem(BaseModel):
     published_at: datetime
     language: str
     content: str
+    source_url: str

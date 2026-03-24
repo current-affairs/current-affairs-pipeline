@@ -48,7 +48,8 @@ def get_today_digest(request: DigestRequest) -> DigestResponse:
                     source=content.source_name,
                     published_at=content.published_at,
                     language=content.language,
-                    content=content.content
+                    content=content.content,
+                    source_url=content.source_url
                 )
             )
 

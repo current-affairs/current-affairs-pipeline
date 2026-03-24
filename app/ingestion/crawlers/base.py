@@ -9,7 +9,8 @@ class BaseCrawler(ABC):
         html = self.fetch(item)
         parsed = self.parse(html, item)
         cleaned = self.clean(parsed)
-        return cleaned
+        parsed["content"] = cleaned
+        return parsed
 
     def fetch(self, item: DigestItem) -> str:
         import httpx
@@ -18,7 +19,7 @@ class BaseCrawler(ABC):
             "User-Agent": "Mozilla/5.0"
         }
 
-        response = httpx.get(item.id, headers=headers, timeout=10)
+        response = httpx.get(item.source_url, headers=headers, timeout=10)
         response.raise_for_status()
         return response.text
 
