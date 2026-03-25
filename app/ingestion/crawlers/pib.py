@@ -131,6 +131,5 @@ class PIBCrawler(BaseCrawler):
     # ------------------------
     def clean(self, data: dict) -> DigestItem:
         content = clean_text(data["content"])
-        content = remove_boilerplate(content)
 
         return content
