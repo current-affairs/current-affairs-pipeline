@@ -1,7 +1,7 @@
 
 from app.schemas.digest.item import DigestItem
-from app.ingestion.crawlers.factory import CrawlerFactory
-from app.services.content_service import ContentService
+from app.ingestion.crawlers.crawler_factory import CrawlerFactory
+from app.services.cleaned_content_service import ContentService
 
 async def scrape_content(digest: DigestItem):
     crawler = CrawlerFactory.get_crawler(digest.source)
