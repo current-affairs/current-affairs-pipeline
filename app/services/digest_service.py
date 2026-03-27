@@ -2,13 +2,13 @@ from datetime import datetime, timezone
 from venv import logger
 from sqlalchemy import update
 from app.core.feed_status import FeedStatus
-from app.schemas.clean_digest_result import CleanDigestResult
-from app.schemas.digest_request import DigestRequest
-from app.schemas.digest_item import DigestItem
-from app.schemas.digest_response import DigestResponse
+from app.schemas.digest.clean_result import CleanDigestResult
+from app.schemas.digest.request import DigestRequest
+from app.schemas.digest.item import DigestItem
+from app.schemas.digest.response import DigestResponse
 from app.core.database import get_db
 from app.models.content import Content
-from app.services.azure_ai import filter_digest
+from app.services.azure_ai_service import filter_digest
 import logging
 
 logger = logging.getLogger(__name__)

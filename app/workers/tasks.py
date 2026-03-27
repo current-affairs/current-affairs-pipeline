@@ -2,7 +2,7 @@ import feedparser
 from dateutil import parser
 from datetime import datetime, timezone
 import logging
-from app.services import feeds
+from app.services import feeds_service
 from urllib.parse import urlparse, urlunparse, parse_qs, urlencode
 
 logging.basicConfig(level=logging.INFO)
@@ -170,7 +170,7 @@ def process_rss_content(feed_config):
 
             debug_print_payload(payload)
 
-            feeds.process_content(payload)
+            feeds_service.process_content(payload)
 
         except Exception as e:
             logging.error(

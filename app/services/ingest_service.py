@@ -1,5 +1,5 @@
 import logging
-from app.schemas.ingest import IngestRequest
+from app.schemas.ingestion.request import IngestRequest
 from app.workers.tasks import process_rss_content
 
 async def ingest_rss(data: IngestRequest) -> dict:

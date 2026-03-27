@@ -3,8 +3,8 @@ from sqlalchemy import update
 from app.core.feed_status import FeedStatus
 from app.models.cleaned_content import CleanedContent
 from app.models.content import Content
-from app.schemas.digest_item import DigestItem
-from app.services.language import detect_language
+from app.schemas.digest.item import DigestItem
+from app.services.language_service import detect_language
 import logging
 
 logger = logging.getLogger(__name__)

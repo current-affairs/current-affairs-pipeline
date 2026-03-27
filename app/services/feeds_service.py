@@ -1,11 +1,11 @@
 from app.core.database import get_db
 from app.models.content import Content
-from app.services.normalization import normalize_content
-from app.services.dedup import is_duplicate
-from app.services.cluster import find_cluster, create_cluster
-from app.services.language import detect_language
+from app.services.normalization_service import normalize_content
+from app.services.dedup_service import is_duplicate
+from app.services.cluster_service import find_cluster, create_cluster
+from app.services.language_service import detect_language
 from app.utils.hash import generate_hash
-from app.services.canonical import update_canonical_for_cluster
+from app.services.canonical_service import update_canonical_for_cluster
 from app.core.source_priority import get_source_priority
 from app.core.feed_status import FeedStatus
 import logging

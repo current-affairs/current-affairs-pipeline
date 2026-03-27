@@ -1,6 +1,6 @@
 from app.core.config import settings
 from langchain_openai import AzureChatOpenAI
-from app.schemas.digest_filter_response import DigestFilterResponse
+from app.schemas.digest.filter_response import DigestFilterResponse
 from langchain_core.prompts import ChatPromptTemplate
 from app.core.app_constants import AppConstants
 

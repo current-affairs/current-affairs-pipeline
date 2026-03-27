@@ -1,5 +1,5 @@
 
-from app.schemas.digest_item import DigestItem
+from app.schemas.digest.item import DigestItem
 from app.ingestion.crawlers.factory import CrawlerFactory
 from app.services.content_service import ContentService
 

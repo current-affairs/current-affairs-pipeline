@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from app.schemas.digest_item import DigestItem
+from app.schemas.digest.item import DigestItem
 
 
 class BaseCrawler(ABC):

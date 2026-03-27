@@ -4,7 +4,7 @@ import re
 
 from app.ingestion.crawlers.base import BaseCrawler
 from app.ingestion.crawlers.utils import clean_text, remove_boilerplate
-from app.schemas.digest_item import DigestItem
+from app.schemas.digest.item import DigestItem
 
 class BBCCrawler(BaseCrawler):
     
