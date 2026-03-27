@@ -1,8 +1,8 @@
 from bs4 import BeautifulSoup
 from datetime import datetime
 
-from app.ingestion.crawlers.base import BaseCrawler
-from app.ingestion.crawlers.utils import clean_text
+from app.ingestion.crawlers.base_crawler import BaseCrawler
+from app.ingestion.crawlers.crawler_utils import clean_text
 from app.schemas.digest.item import DigestItem
 
 

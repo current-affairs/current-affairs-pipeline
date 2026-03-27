@@ -1,6 +1,6 @@
-from app.ingestion.crawlers.bbc import BBCCrawler
-from app.ingestion.crawlers.hindu import HinduCrawler
-from app.ingestion.crawlers.pib import PIBCrawler
+from app.ingestion.crawlers.bbc_crawler import BbcCrawler
+from app.ingestion.crawlers.hindu_crawler import HinduCrawler
+from app.ingestion.crawlers.pib_crawler import PibCrawler
 
 
 class CrawlerFactory:
@@ -10,12 +10,12 @@ class CrawlerFactory:
         source = source.lower()
 
         if source == "pib":
-            return PIBCrawler()
+            return PibCrawler()
 
         if source == "the hindu":
             return HinduCrawler()
 
         if source == "bbc india":
-            return BBCCrawler()
+            return BbcCrawler()
 
         raise ValueError(f"No crawler for source: {source}")

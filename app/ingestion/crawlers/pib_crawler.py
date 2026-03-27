@@ -3,12 +3,12 @@ from datetime import datetime
 import re
 from typing import List, Dict
 
-from app.ingestion.crawlers.base import BaseCrawler
-from app.ingestion.crawlers.utils import clean_text, remove_boilerplate
+from app.ingestion.crawlers.base_crawler import BaseCrawler
+from app.ingestion.crawlers.crawler_utils import clean_text, remove_boilerplate
 from app.schemas.digest.item import DigestItem
 
 
-class PIBCrawler(BaseCrawler):
+class PibCrawler(BaseCrawler):
 
     def parse(self, html: str, item: DigestItem) -> dict:
         soup = BeautifulSoup(html, "lxml")
@@ -133,3 +133,7 @@ class PIBCrawler(BaseCrawler):
         content = clean_text(data["content"])
 
         return content
+
+
+# Backward-compatible alias.
+PIBCrawler = PibCrawler

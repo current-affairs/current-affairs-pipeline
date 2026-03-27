@@ -5,7 +5,7 @@ from app.schemas.digest.item import DigestItem
 from app.schemas.digest.request import DigestRequest
 from app.schemas.digest.response import DigestResponse
 from app.schemas.ingestion.request import IngestRequest
-from app.services.crawl_service import scrap_content
+from app.services.crawl_service import scrape_content
 from app.services.digest_service import get_today_digest, clean_daily_digest
 
 app = func.FunctionApp(http_auth_level=func.AuthLevel.FUNCTION)
@@ -40,7 +40,7 @@ async def clean_raw_digest(req: func.HttpRequest) -> func.HttpResponse:
 async def crawl_digest(req: func.HttpRequest) -> func.HttpResponse:
     req_body = req.get_json()
     request = DigestItem(**req_body)
-    response = await scrap_content(request)
+    response = await scrape_content(request)
     return func.HttpResponse(
         response.model_dump_json(),
         mimetype="application/json"
