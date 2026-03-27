@@ -72,8 +72,3 @@ def process_rss_feed_content(feed_config):
             )
 
     logging.info(f"Total processed: {feed_counter} | Source: {source}")
-
-
-# Backward-compatible alias.
-def process_rss_content(feed_config):
-    return process_rss_feed_content(feed_config)

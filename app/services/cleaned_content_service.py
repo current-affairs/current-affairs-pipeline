@@ -33,7 +33,3 @@ class CleanedContentService:
                 f"Clean Database Add/update failed for {digest_item.id}: with error {ex}")
 
         return content
-
-
-# Backward-compatible alias.
-ContentService = CleanedContentService

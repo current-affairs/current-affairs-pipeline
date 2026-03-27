@@ -133,7 +133,3 @@ class PibCrawler(BaseCrawler):
         content = clean_text(data["content"])
 
         return content
-
-
-# Backward-compatible alias.
-PIBCrawler = PibCrawler

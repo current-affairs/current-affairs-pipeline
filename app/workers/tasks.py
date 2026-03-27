@@ -1,1 +1,0 @@
-from app.workers.rss_ingestion_worker import process_rss_content

@@ -51,7 +51,3 @@ class BbcCrawler(BaseCrawler):
     def clean(self, data: dict) -> DigestItem:
         content = clean_text(data["content"])
         return content
-
-
-# Backward-compatible alias.
-BBCCrawler = BbcCrawler
